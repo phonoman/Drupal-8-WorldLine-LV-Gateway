@@ -1,0 +1,7 @@
+name: Worldline LV (ex. FirstData) IBIS
+type: module
+description: 'Provides a Wordline (ex. FirstData) LV payment gateway integration for Drupal 8.'
+package: Commerce
+core: '8.x'
+dependencies:
+  - commerce:commerce_payment

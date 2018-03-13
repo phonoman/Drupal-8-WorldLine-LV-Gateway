@@ -1,0 +1,18 @@
+commerce_ibis.request_complete:
+  path: '/commerce_ibis/complete'
+  defaults:
+    _controller: '\Drupal\commerce_ibis\Controller\RequestsController::complete'
+  requirements:
+    _permission: 'access content'
+commerce_ibis.request_fail:
+  path: '/commerce_ibis/fail'
+  defaults:
+    _controller: '\Drupal\commerce_ibis\Controller\RequestsController::fail'
+  requirements:
+    _permission: 'access content'
+commerce_ibis.reverse:
+  path: 'admin/config/{order_id}/payment/reverse'
+  defaults:
+    _controller: '\Drupal\commerce_ibis\Controller\RequestsController::reverse'
+  requirements:
+    _permission: 'administer commerce_payment'

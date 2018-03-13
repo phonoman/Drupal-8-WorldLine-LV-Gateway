@@ -1,0 +1,201 @@
+<?php
+
+/**
+ * @file
+ * IBIS payment service install file.
+ */
+
+/**
+ * Implements hook_schema().
+ *
+ * Defines the Gateway used tables by this Commerce module.
+ *
+ */
+function commerce_ibis_schema() {
+  $schema = [];
+  $schema['commerce_ibis_transaction'] = [
+    'fields' => [
+      'id' => [
+        'description' => 'Primary key: the row ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'trans_id' => [
+        'description' => 'The transaction ID.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'amount' => [
+        'description' => 'The total amount of transaction.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'currency' => [
+        'description' => 'Currency of transaction.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'order_id' => [
+        'description' => 'Transaction order ID.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'client_ip_addr' => [
+        'description' => 'Client IP address.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'description' => [
+        'description' => 'Transaction description.',
+        'type' => 'text',
+      ],
+      'language' => [
+        'description' => 'Client language.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'dms_ok' => [
+        'description' => 'DMS payment made.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'result' => [
+        'description' => 'Result string.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'result_code' => [
+        'description' => 'Result code.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'result_3dsecure' => [
+        'description' => 'Result from 3D Secure system.',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      'card_number' => [
+        'description' => 'Card number',
+        'type' => 'varchar',
+        'length' => 50,
+        'default' => '',
+      ],
+      't_date' => [
+        'description' => 'Transaction date.',
+        'type' => 'varchar',
+        'length' => 20,
+        'default' => '',
+      ],
+      'response' => [
+        'description' => 'Response string.',
+        'type' => 'text',
+      ],
+      'reversal_amount' => [
+        'description' => 'Reversed amount.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'makeDMS_amount' => [
+        'description' => 'DMS payment amount.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+  $schema['commerce_ibis_batch'] = [
+    'fields' => [
+      'id' => [
+        'description' => 'Primary key: the row ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'result' => [
+        'description' => 'Result string.',
+        'type' => 'text',
+      ],
+      'result_code' => [
+        'description' => 'Result code.',
+        'type' => 'varchar',
+        'length' => 3,
+        'default' => '',
+      ],
+      'count_reversal' => [
+        'type' => 'varchar',
+        'length' => 10,
+        'default' => '',
+      ],
+      'count_transaction' => [
+        'type' => 'varchar',
+        'length' => 10,
+        'default' => '',
+      ],
+      'amount_reversal' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'default' => '',
+      ],
+      'amount_transaction' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'default' => '',
+      ],
+      'close_date' => [
+        'description' => 'Busines day close date.',
+        'type' => 'varchar',
+        'length' => 20,
+        'default' => '',
+      ],
+      'response' => [
+        'description' => 'Response string.',
+        'type' => 'text',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+  $schema['commerce_ibis_error'] = [
+    'fields' => [
+      'id' => [
+        'description' => 'Primary key: the row ID.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'error_time' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'default' => '',
+      ],
+      'action' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'default' => '',
+      ],
+      'response' => [
+        'description' => 'Response string.',
+        'type' => 'text',
+      ],
+    ],
+    'primary key' => ['id'],
+  ];
+  return $schema;
+}
+
+function commerce_ibis_uninstall() {
+  // Remove states.
+  \Drupal::state()->delete('commerce_ibis.IBIS_lastclosedate');
+}
