@@ -1,7 +1,7 @@
 <?php
 
-// use Drupal\commerce_ibis\Merchant\Merchant;
-// use Drupal\Core\Database\Database;
+use Drupal\commerce_ibis\Merchant\Merchant;
+use Drupal\Core\Database\Database;
 
 /**
  * Perform closeDay() for batch payments.
