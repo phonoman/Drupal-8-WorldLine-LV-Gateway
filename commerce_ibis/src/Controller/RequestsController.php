@@ -30,10 +30,11 @@ class RequestsController extends ControllerBase {
     // Load order id from passed request data.
     $order_id = $request->get('order_id');
     $trans_id = $request->get('trans_id');
+    $messenger = \Drupal::messenger();
 
     if (empty($order_id) || empty($trans_id)) {
       // Explain.
-      drupal_set_message(t('Invalid request!'), 'error', FALSE);
+      $messenger->addError(t('Invalid request!'));
 
       return $this->redirect('<front>');
     }
@@ -58,10 +59,11 @@ class RequestsController extends ControllerBase {
     // Load order id from passed request data.
     $order_id = $request->get('order_id');
     $trans_id = $request->get('trans_id');
+    $messenger = \Drupal::messenger();
 
     if (empty($order_id) || empty($trans_id)) {
       // Explain.
-      drupal_set_message(t('Invalid request!'), 'error', FALSE);
+      $messenger->addError(t('Invalid request!'));
 
       return $this->redirect('<front>');
     }
@@ -84,11 +86,13 @@ class RequestsController extends ControllerBase {
    * Reverse payment in full amount.
    */
   public function reverse($order_id) {
+
+    $messenger = \Drupal::messenger();
     // Validate given id.
     if (!is_numeric($order_id)) {
-      drupal_set_message(t('Invalid request!'), 'error', FALSE);
+      $messenger->addError(t('Invalid request!'));
 
-      \Drupal::logger('commerce_ibis')->error('not numeral');
+      \Drupal::logger('commerce_ibis')->error('Order ID not numeral.');
       return $this->redirect('<front>');
     }
     // Conn.
@@ -102,9 +106,9 @@ class RequestsController extends ControllerBase {
     $results = $data->fetchAll(\PDO::FETCH_OBJ);
 
     if (count($results) == 0) {
-      drupal_set_message(t('Invalid request!'), 'error', FALSE);
+      $messenger->addError(t('Invalid request!'));
 
-      \Drupal::logger('commerce_ibis')->error('no data in db');
+      \Drupal::logger('commerce_ibis')->error('Cannot reverse. No matching entries found.');
       return $this->redirect('<front>');
     }
 
@@ -156,7 +160,7 @@ class RequestsController extends ControllerBase {
 
       $message = t('Payment reversed for # @order: @resp', ['@resp' => $resp, '@order' => $order_id]);
       \Drupal::logger('commerce_ibis')->info($message);
-      drupal_set_message(t('Payment reversed for @order by @amount.', ['@order' => $order_id, '@amount' => $amount / 100]));
+      $messenger->addMessage(t('Payment reversed for @order by @amount.', ['@order' => $order_id, '@amount' => $amount / 100]));
 
       return $this->redirect('<front>');
     }
@@ -172,7 +176,7 @@ class RequestsController extends ControllerBase {
       $message = t('Payment reverse failed for # @order: @resp', ['@resp' => $resp, '@order' => $order_id]);
       \Drupal::logger('commerce_ibis')->error($message);
 
-      drupal_set_message(t('Payment reverse failed.'), 'error', FALSE);
+      $messenger->addError(t('Payment reverse failed.'));
 
       return $this->redirect('<front>');
     }

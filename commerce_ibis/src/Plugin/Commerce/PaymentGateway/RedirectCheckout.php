@@ -120,6 +120,7 @@ class RedirectCheckout extends OffsitePaymentGatewayBase {
   public function onReturn(OrderInterface $order, Request $request) {
 
     $trans_id = $request->get('trans_id');
+    // Requests cripple + signs into blank spaces. Revert.
     $trans_id = str_replace(' ', '+', $trans_id);
 
     $ecomm_server_url = $this->configuration['ecomm_server_url'];
@@ -130,6 +131,7 @@ class RedirectCheckout extends OffsitePaymentGatewayBase {
 
     $order_id = $order->id();
     $connection = Database::getConnection();
+    $messenger = \Drupal::messenger();
 
     $query = $connection->select('commerce_ibis_transaction', 't')
       ->fields('t')
@@ -184,7 +186,7 @@ class RedirectCheckout extends OffsitePaymentGatewayBase {
       $message = t('Paldies, ka iepirkāties VALLETA interneta veikalā!<br>
       5 min laikā i-dāvanu karte/-es un informatīvs rēķins tiks nosūtīts uz Jūsu norādīto e-pastu.<br>
       Lai pārliecinātos par to saņemšanu, lūdzu, pārbaudiet arī „Junk” un „Spam” folderus.');
-      drupal_set_message($message);
+      $messenger->addMessage($message);
     }
     else {
       $result = $connection->insert('commerce_ibis_error')
